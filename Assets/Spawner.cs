@@ -11,24 +11,31 @@ public class Spawner : MonoBehaviour
     private List<GameObject> obstacles;
     private List<GameObject> backgroundObjects;
     private List<GameObject> Parallaxbg;
+    private List<GameObject> Extras;
 
 
     [Header("Stage1")]
     public List<GameObject> obstacles1;
     public List<GameObject> backgroundObjects1;
     public List<GameObject> Parallaxbg1;
+    public List<GameObject> Extras1;
+    public GameObject Ground1;
     public VolumeProfile Volume1;
 
     [Header("Stage2")]
     public List<GameObject> obstacles2;
     public List<GameObject> backgroundObjects2;
     public List<GameObject> Parallaxbg2;
+    public List<GameObject> Extras2;
+    public GameObject Ground2;
     public VolumeProfile Volume2;
 
     [Header("Stage3")]
     public List<GameObject> obstacles3;
     public List<GameObject> backgroundObjects3;
     public List<GameObject> Parallaxbg3;
+    public List<GameObject> Extras3;
+    public GameObject Ground3;
     public VolumeProfile Volume3;
 
 
@@ -54,6 +61,11 @@ public class Spawner : MonoBehaviour
 
     private bool transitioning;
     public GameObject allObstacles;
+
+
+    private float backgroundLeftEdge;
+    private float backgroundRightEdge;
+    private Vector3 backgroundDistanceBtwEdges;
     void Start()
     {
         changeStageSkin(currentStage);
@@ -63,20 +75,24 @@ public class Spawner : MonoBehaviour
         // Parallaxbg[currentPara].transform.position = new Vector3(11.845f, Parallaxbg[currentPara].transform.position.y, parraPosition.transform.position.z);
     }
 
+
+
+
+
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
             StartCoroutine(Transition());
 
-        foreach (GameObject t in Parallaxbg)
-        {
-            if (t.transform.position.x <= -12.83f)
-            {
-                t.transform.position = new Vector3(11.8f, Parallaxbg[currentPara].transform.position.y, parraPosition.transform.position.z);
-            }
+        //foreach (GameObject t in Parallaxbg)
+        //{
+        //    if (t.transform.position.x <= -12.83f)
+        //    {
+        //        t.transform.position = new Vector3(11.8f, Parallaxbg[currentPara].transform.position.y, parraPosition.transform.position.z);
+        //    }
 
-        }
+        //}
         //if (Parallaxbg[currentPara].transform.position.x <= -12.83f)
         //{
         //    int oldCurrentPara = currentPara;
@@ -127,17 +143,24 @@ public class Spawner : MonoBehaviour
                 obstacles = obstacles1;
                 Parallaxbg = Parallaxbg1;
                 backgroundObjects = backgroundObjects1;
+                Extras = Extras1;
                 Camera.main.GetComponent<Volume>().profile = Volume1;
                 break;
             case 2:
                 obstacles = obstacles2;
                 Parallaxbg = Parallaxbg2;
+                Extras = Extras2;
                 backgroundObjects = backgroundObjects2;
+                Ground1.SetActive(false);
+                Ground2.SetActive(true);
                 Camera.main.GetComponent<Volume>().profile = Volume2;
                 break;
             case 3:
                 obstacles = obstacles3;
                 Parallaxbg = Parallaxbg3;
+                Extras = Extras3;
+                Ground2.SetActive(false);
+                Ground3.SetActive(true);
                 backgroundObjects = backgroundObjects3;
                 Camera.main.GetComponent<Volume>().profile = Volume3;
                 break;
@@ -148,6 +171,13 @@ public class Spawner : MonoBehaviour
             t.SetActive(true);
 
         }
+
+        foreach (GameObject t in Extras)
+        {
+            t.SetActive(true);
+
+        }
+
 
         currentPara = Random.Range(0, Parallaxbg.Count);
     }
@@ -181,6 +211,12 @@ public class Spawner : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
         foreach (GameObject t in Parallaxbg)
+        {
+            t.SetActive(false);
+
+        }
+
+        foreach (GameObject t in Extras)
         {
             t.SetActive(false);
 

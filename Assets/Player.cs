@@ -89,9 +89,9 @@ public class Player : MonoBehaviour
         GameHandler.Instance.moveObjectSpd = 0;
         immoTimer = immoTimerDur;
 
-        while (hurtSpeed < speedHurtyMinMax.y)
+        while (hurtSpeed > speedHurtyMinMax.y)
         {
-            hurtSpeed += Time.deltaTime;
+            hurtSpeed -= Time.deltaTime;
             GameHandler.Instance.moveObjectSpd = hurtSpeed;
            yield return new WaitForEndOfFrame();
         }
